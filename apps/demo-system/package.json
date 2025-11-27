@@ -1,0 +1,9 @@
+{
+    "name": "@demo-system/app",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "start:api": "bun run api/server.ts",
+        "start:ui": "bun run ui/server.ts"
+    }
+}

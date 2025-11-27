@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo Shop</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+        }
+        body {
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            background: #0b1220;
+            color: #e3e9ff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 32px;
+        }
+        .app-shell {
+            width: 100%;
+            max-width: 900px;
+            background: #121a2d;
+            border-radius: 16px;
+            border: 1px solid #1f2b45;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+            padding: 32px;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid #1f2b45;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        nav {
+            display: flex;
+            gap: 12px;
+        }
+        button, input, select {
+            font: inherit;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #273552;
+            background: #18233a;
+            color: inherit;
+        }
+        button.primary {
+            background: #4f7cff;
+            border-color: #4f7cff;
+            cursor: pointer;
+        }
+        button[disabled] {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .view {
+            display: none;
+        }
+        .view.active {
+            display: block;
+        }
+        .status {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .status.error {
+            background: #4f2222;
+            color: #ffbaba;
+        }
+        .status.success {
+            background: #1f3325;
+            color: #aff6c8;
+        }
+        ul.products,
+        ul.cart {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 16px;
+        }
+        li.card {
+            border: 1px solid #273552;
+            border-radius: 12px;
+            padding: 16px;
+            background: #0f182b;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .card header {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+        .card h3 {
+            margin: 0;
+        }
+        .empty-state {
+            padding: 32px;
+            border: 1px dashed #273552;
+            border-radius: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <header>
+            <h1 data-testid="app-title">Demo Shop Console</h1>
+            <nav>
+                <button data-testid="nav-login">Login</button>
+                <button data-testid="nav-dashboard">Dashboard</button>
+                <button data-testid="nav-products">Products</button>
+                <button data-testid="nav-cart">Cart</button>
+            </nav>
+        </header>
+
+        <main>
+            <section id="login-view" class="view" data-route="/login">
+                <h2>Secure Login</h2>
+                <label>
+                    Username
+                    <input type="text" data-testid="username-input" placeholder="demo user" />
+                </label>
+                <label>
+                    Password
+                    <input type="password" data-testid="password-input" placeholder="password" />
+                </label>
+                <button class="primary" data-testid="login-button">Access Dashboard</button>
+                <div class="status error" data-testid="login-error" hidden></div>
+            </section>
+
+            <section id="dashboard-view" class="view" data-route="/dashboard">
+                <h2>Dashboard</h2>
+                <p data-testid="welcome-message">Welcome.</p>
+                <div style="display:flex; gap:12px; margin-top:16px;">
+                    <button class="primary" data-testid="dashboard-products">Browse Products</button>
+                    <button data-testid="dashboard-cart">View Cart</button>
+                    <button data-testid="logout-button">Logout</button>
+                </div>
+            </section>
+
+            <section id="products-view" class="view" data-route="/products">
+                <h2>Products</h2>
+                <ul class="products" data-testid="products-list"></ul>
+                <div class="status success" data-testid="product-status" hidden></div>
+            </section>
+
+            <section id="cart-view" class="view" data-route="/cart">
+                <h2>Your Cart</h2>
+                <div class="empty-state" data-testid="cart-empty">Cart is empty</div>
+                <ul class="cart" data-testid="cart-items"></ul>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const API_BASE_URL = "{{API_BASE_URL}}";
+        const state = {
+            token: localStorage.getItem("demo-token") || null,
+            displayName: localStorage.getItem("demo-display-name") || "",
+            products: [],
+            cart: []
+        };
+
+        const views = {
+            login: document.getElementById("login-view"),
+            dashboard: document.getElementById("dashboard-view"),
+            products: document.getElementById("products-view"),
+            cart: document.getElementById("cart-view")
+        };
+
+        const elements = {
+            loginError: document.querySelector("[data-testid='login-error']"),
+            welcomeMessage: document.querySelector("[data-testid='welcome-message']"),
+            productsList: document.querySelector("[data-testid='products-list']"),
+            productStatus: document.querySelector("[data-testid='product-status']"),
+            cartItems: document.querySelector("[data-testid='cart-items']"),
+            cartEmpty: document.querySelector("[data-testid='cart-empty']")
+        };
+
+        async function api(path, options = {}) {
+            const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+            if (state.token) {
+                headers["Authorization"] = `Bearer ${state.token}`;
+            }
+            const response = await fetch(`${API_BASE_URL}${path}`, {
+                ...options,
+                headers,
+            });
+            if (!response.ok) {
+                const text = await response.text();
+                throw new Error(text || response.statusText);
+            }
+            return response.json();
+        }
+
+        function renderRoute(route) {
+            for (const section of Object.values(views)) {
+                section.classList.toggle("active", section.dataset.route === route);
+            }
+        }
+
+        function setRoute(route) {
+            if (window.location.pathname !== route) {
+                window.history.pushState({}, "", route);
+            }
+            renderRoute(route);
+        }
+
+        async function handleLogin() {
+            const username = document.querySelector("[data-testid='username-input']").value.trim();
+            const password = document.querySelector("[data-testid='password-input']").value.trim();
+            elements.loginError.hidden = true;
+            try {
+                const result = await api("/api/login", {
+                    method: "POST",
+                    body: JSON.stringify({ username, password })
+                });
+                state.token = result.token;
+                state.displayName = result.displayName || username;
+                localStorage.setItem("demo-token", state.token);
+                localStorage.setItem("demo-display-name", state.displayName);
+                elements.welcomeMessage.textContent = `Welcome, ${state.displayName}`;
+                setRoute("/dashboard");
+            } catch (err) {
+                elements.loginError.hidden = false;
+                elements.loginError.textContent = "Invalid credentials";
+            }
+        }
+
+        async function loadProducts() {
+            try {
+                const items = await api("/api/products", { method: "GET" });
+                state.products = items;
+                renderProducts();
+            } catch (err) {
+                elements.productStatus.hidden = false;
+                elements.productStatus.className = "status error";
+                elements.productStatus.textContent = "Failed to load products";
+            }
+        }
+
+        async function loadCart() {
+            if (!state.token) {
+                elements.cartEmpty.hidden = false;
+                elements.cartItems.innerHTML = "";
+                return;
+            }
+            try {
+                const { items } = await api("/api/cart/items", { method: "GET" });
+                state.cart = items;
+                renderCart();
+            } catch (err) {
+                elements.cartEmpty.hidden = false;
+                elements.cartItems.innerHTML = "";
+            }
+        }
+
+        function renderProducts() {
+            elements.productsList.innerHTML = "";
+            state.products.forEach(product => {
+                const li = document.createElement("li");
+                li.className = "card";
+                li.setAttribute("data-testid", `product-card-${product.id}`);
+                li.innerHTML = `
+                    <header>
+                        <h3>${product.name}</h3>
+                        <span>$${product.price}</span>
+                    </header>
+                    <p>${product.description}</p>
+                    <button class="primary" data-testid="add-to-cart-${product.id}">Add to Cart</button>
+                `;
+                li.querySelector("button").addEventListener("click", () => addToCart(product.id));
+                elements.productsList.appendChild(li);
+            });
+        }
+
+        async function addToCart(productId) {
+            elements.productStatus.hidden = true;
+            if (!state.token) {
+                elements.productStatus.hidden = false;
+                elements.productStatus.className = "status error";
+                elements.productStatus.textContent = "Login required";
+                return;
+            }
+            try {
+                const { items } = await api("/api/cart/items", {
+                    method: "POST",
+                    body: JSON.stringify({ productId, quantity: 1 })
+                });
+                state.cart = items;
+                elements.productStatus.hidden = false;
+                elements.productStatus.className = "status success";
+                elements.productStatus.textContent = "Added to cart";
+            } catch (err) {
+                elements.productStatus.hidden = false;
+                elements.productStatus.className = "status error";
+                elements.productStatus.textContent = "Unable to add to cart";
+            }
+        }
+
+        function renderCart() {
+            elements.cartItems.innerHTML = "";
+            if (!state.cart || state.cart.length === 0) {
+                elements.cartEmpty.hidden = false;
+                return;
+            }
+            elements.cartEmpty.hidden = true;
+            state.cart.forEach(item => {
+                const li = document.createElement("li");
+                li.className = "card";
+                li.setAttribute("data-testid", `cart-item-${item.productId}`);
+                li.innerHTML = `
+                    <header>
+                        <h3>${item.name}</h3>
+                        <span>Qty: ${item.quantity}</span>
+                    </header>
+                    <p>$${item.price} each</p>
+                `;
+                elements.cartItems.appendChild(li);
+            });
+        }
+
+        function logout() {
+            state.token = null;
+            state.cart = [];
+            localStorage.removeItem("demo-token");
+            localStorage.removeItem("demo-display-name");
+            elements.cartItems.innerHTML = "";
+            elements.cartEmpty.hidden = false;
+            setRoute("/login");
+        }
+
+        function bindNav() {
+            const navBindings = [
+                ["nav-login", () => setRoute("/login")],
+                ["nav-dashboard", () => setRoute("/dashboard")],
+                ["nav-products", () => { setRoute("/products"); loadProducts(); }],
+                ["nav-cart", () => { setRoute("/cart"); loadCart(); }]
+            ];
+            navBindings.forEach(([testId, handler]) => {
+                document.querySelector(`[data-testid='${testId}']`).addEventListener("click", handler);
+            });
+            document.querySelector("[data-testid='dashboard-products']").addEventListener("click", () => {
+                setRoute("/products");
+                loadProducts();
+            });
+            document.querySelector("[data-testid='dashboard-cart']").addEventListener("click", () => {
+                setRoute("/cart");
+                loadCart();
+            });
+            document.querySelector("[data-testid='logout-button']").addEventListener("click", logout);
+        }
+
+        document.querySelector("[data-testid='login-button']").addEventListener("click", handleLogin);
+
+        window.addEventListener("popstate", () => {
+            const route = window.location.pathname;
+            renderRoute(route);
+            if (route === "/products") loadProducts();
+            if (route === "/cart") loadCart();
+        });
+
+        function boot() {
+            bindNav();
+            if (state.token) {
+                elements.welcomeMessage.textContent = `Welcome, ${state.displayName}`;
+                setRoute("/dashboard");
+                loadCart();
+            } else {
+                setRoute("/login");
+            }
+        }
+
+        boot();
+    </script>
+</body>
+</html>

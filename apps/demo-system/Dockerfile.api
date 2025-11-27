@@ -1,0 +1,7 @@
+FROM oven/bun:1.1.21
+WORKDIR /app
+COPY package.json ./
+COPY api ./api
+ENV DEMO_API_PORT=3020
+EXPOSE 3020
+CMD ["bun", "run", "api/server.ts"]

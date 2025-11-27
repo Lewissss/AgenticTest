@@ -1,0 +1,16 @@
+{
+    "name": "@atf/tui",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "start": "bun run src/index.tsx"
+    },
+    "dependencies": {
+        "ink": "^4.4.1",
+        "ink-select-input": "^5.0.0",
+        "ink-text-input": "^5.0.1",
+        "ink-spinner": "^5.0.0",
+        "react": "^18.2.0",
+        "@atf/core": "workspace:*"
+    }
+}

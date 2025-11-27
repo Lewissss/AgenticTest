@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  demo-api:
+    build:
+      context: ./apps/demo-system
+      dockerfile: Dockerfile.api
+    environment:
+      DEMO_USERNAME: ${DEMO_USERNAME:-user}
+      DEMO_PASSWORD: ${DEMO_PASSWORD:-pass}
+      DEMO_API_PORT: 3020
+    ports:
+      - "3020:3020"
+    restart: unless-stopped
+
+  demo-web:
+    build:
+      context: ./apps/demo-system
+      dockerfile: Dockerfile.ui
+    environment:
+      DEMO_WEB_PORT: 3010
+      DEMO_API_BASE_URL: http://demo-api:3020
+    depends_on:
+      - demo-api
+    ports:
+      - "3010:3010"
+    restart: unless-stopped

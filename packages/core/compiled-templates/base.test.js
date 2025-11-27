@@ -1,0 +1,17 @@
+import { test } from "bun:test";
+import { CompiledRunner } from "../../packages/core/src/compiled-runner.ts";
+
+const trace = __TRACE_OBJECT__;
+const timeout = trace.policies?.timeoutsMs || 60000;
+
+test(`__TEST_TITLE__`, async () => {
+    const runner = new CompiledRunner(trace);
+    await runner.setup();
+    try {
+        for (const step of trace.steps) {
+            await runner.executeStep(step);
+        }
+    } finally {
+        await runner.teardown();
+    }
+}, timeout);

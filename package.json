@@ -1,0 +1,16 @@
+{
+    "name": "bun-opentui-framework",
+    "version": "0.0.1",
+    "workspaces": [
+        "packages/*",
+        "apps/*"
+    ],
+    "scripts": {
+        "test": "bun test",
+        "dev": "bun run --filter @atf/tui dev",
+        "atf": "bun run packages/core/src/cli/index.ts"
+    },
+    "devDependencies": {
+        "bun-types": "latest"
+    }
+}
