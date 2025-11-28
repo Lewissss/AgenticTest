@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>API Reference | Pulse Docs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="logo">
+                <span>Pulse Docs</span>
+                <button id="search-button" data-testid="search-button">Search (/)</button>
+            </div>
+            
+        </aside>
+        <main>
+            <article>
+                <header>
+                    <h1>API Reference</h1>
+                </header>
+                <p>All API calls are mocked but we include reference material for selectors and tests.</p>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /runs</code></td>
+<td>List available runs</td>
+</tr>
+<tr>
+<td><code>POST /traces/compile</code></td>
+<td>Compile a trace into a deterministic Bun test</td>
+</tr>
+<tr>
+<td><code>POST /playbooks/execute</code></td>
+<td>Kick off a playbook</td>
+</tr>
+</tbody>
+</table>
+
+            </article>
+        </main>
+    </div>
+
+    <div id="search-modal" class="search-modal" hidden data-testid="search-modal">
+    <div class="search-panel">
+        <header>
+            <input type="text" id="search-input" placeholder="Search docs..." data-testid="search-input" autofocus />
+            <button id="search-close" data-testid="search-close">Esc</button>
+        </header>
+        <ul id="search-results" data-testid="search-results"></ul>
+    </div>
+</div>
+
+    <script src="/public/app.js"></script>
+</body>
+
+</html>

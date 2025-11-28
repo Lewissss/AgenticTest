@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }} | Pulse Docs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="logo">
+                <span>Pulse Docs</span>
+                <button id="search-button" data-testid="search-button">Search (/)</button>
+            </div>
+            {% for section in nav %}
+            <div class="nav-section">
+                <p class="nav-heading">{{ section.title }}</p>
+                <ul>
+                    {% for item in section.items %}
+                    <li><a href="/{{ item.file }}/" data-testid="nav-link-{{ item.file }}">{{ item.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </aside>
+        <main>
+            <article>
+                <header>
+                    <h1>{{ title }}</h1>
+                </header>
+                {{ content | safe }}
+            </article>
+        </main>
+    </div>
+
+    {% include "search.njk" %}
+    <script src="/assets/app.js"></script>
+</body>
+
+</html>

@@ -77,3 +77,23 @@ export function interpolateValue<T>(value: T, ctx: InterpolationContext): T {
     }
     return value;
 }
+
+export function interpolate(
+    template: string,
+    env: Record<string, string> = {},
+    state: Record<string, any> = {},
+    baseUrl = "",
+    apiBaseUrl = ""
+): string {
+    const ctx: InterpolationContext = {
+        baseUrl,
+        apiBaseUrl,
+        env: {
+            ...normalizeEnv(process.env as Record<string, string | undefined>),
+            ...env
+        },
+        state
+    };
+    const normalizedTemplate = template.replace(/\$\{VAR:([A-Za-z0-9_]+)\}/g, (_, key) => `\${ENV:${key}}`);
+    return interpolateString(normalizedTemplate, ctx);
+}

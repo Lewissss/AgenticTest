@@ -1,2 +1,3 @@
 [test]
 # Bun test runner configuration
+root = ["tests", "packages"]

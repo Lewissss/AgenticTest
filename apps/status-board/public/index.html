@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pulseboard | Platform Status</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="hero" data-testid="hero">
+        <div>
+            <p class="eyebrow">Pulseboard Cloud</p>
+            <h1>Platform Status</h1>
+            <p class="lede">Real-time visibility into our core regions and services. Data refreshes every 60 seconds from the monitoring pipeline (mocked in this demo).</p>
+        </div>
+        <div class="summary" id="summary-uptime" data-testid="summary-uptime">
+            <span class="label">Global uptime</span>
+            <strong data-testid="uptime-value">--</strong>
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <header class="section-header">
+                <h2>Services</h2>
+                <button id="refresh" class="ghost" data-testid="refresh-button">Refresh</button>
+            </header>
+            <div class="service-grid" id="service-grid" data-testid="service-grid"></div>
+        </section>
+
+        <section>
+            <header class="section-header">
+                <h2>Incidents & Maintenance</h2>
+                <span class="badge" id="incidents-count" data-testid="incidents-count">0 active</span>
+            </header>
+            <div class="timeline" id="timeline" data-testid="timeline"></div>
+        </section>
+    </main>
+
+    <template id="service-card-template">
+        <article class="card service-card" data-testid="service-card">
+            <div class="card-header">
+                <div>
+                    <h3 data-field="name"></h3>
+                    <p data-field="description" class="muted"></p>
+                </div>
+                <span class="pill" data-field="status"></span>
+            </div>
+            <dl class="meta">
+                <div>
+                    <dt>Region</dt>
+                    <dd data-field="region"></dd>
+                </div>
+                <div>
+                    <dt>SLA</dt>
+                    <dd data-field="sla"></dd>
+                </div>
+                <div>
+                    <dt>Latency (p95)</dt>
+                    <dd data-field="latency"></dd>
+                </div>
+            </dl>
+        </article>
+    </template>
+
+    <template id="timeline-item-template">
+        <article class="timeline-item" data-testid="timeline-item">
+            <div class="dot" data-field="severity"></div>
+            <div>
+                <h4 data-field="title"></h4>
+                <p class="muted" data-field="window"></p>
+                <p data-field="body"></p>
+            </div>
+        </article>
+    </template>
+
+    <script src="app.js" defer></script>
+</body>
+
+</html>

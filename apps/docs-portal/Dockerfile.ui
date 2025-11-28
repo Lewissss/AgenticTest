@@ -1,0 +1,11 @@
+FROM oven/bun:1.1.21 AS builder
+WORKDIR /app
+
+COPY package.json bun.lockb* ./
+RUN bun install
+
+COPY . .
+RUN bun x @11ty/eleventy && mkdir -p _site/assets && cp -r public/. _site/assets
+
+FROM nginx:1.27-alpine
+COPY --from=builder /app/_site/ /usr/share/nginx/html

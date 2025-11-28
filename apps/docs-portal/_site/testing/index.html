@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Testing Playbooks | Pulse Docs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="logo">
+                <span>Pulse Docs</span>
+                <button id="search-button" data-testid="search-button">Search (/)</button>
+            </div>
+            
+        </aside>
+        <main>
+            <article>
+                <header>
+                    <h1>Testing Playbooks</h1>
+                </header>
+                <p>Use playbooks to chain traces, compile tests, and publish reports. This page is intentionally short but gives the search index more surface area.</p>
+<ul>
+<li>Draft test plan</li>
+<li>Configure environment variables</li>
+<li>Execute playbook</li>
+<li>Export artifacts</li>
+</ul>
+
+            </article>
+        </main>
+    </div>
+
+    <div id="search-modal" class="search-modal" hidden data-testid="search-modal">
+    <div class="search-panel">
+        <header>
+            <input type="text" id="search-input" placeholder="Search docs..." data-testid="search-input" autofocus />
+            <button id="search-close" data-testid="search-close">Esc</button>
+        </header>
+        <ul id="search-results" data-testid="search-results"></ul>
+    </div>
+</div>
+
+    <script src="/public/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CLI Basics | Pulse Docs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="logo">
+                <span>Pulse Docs</span>
+                <button id="search-button" data-testid="search-button">Search (/)</button>
+            </div>
+            
+        </aside>
+        <main>
+            <article>
+                <header>
+                    <h1>CLI Basics</h1>
+                </header>
+                <p>The Agentic CLI (mock) helps automate test workflows. Below is sample content for the docs portal.</p>
+<h2>Installation</h2>
+<pre><code class="language-bash">bun install -g agentic-cli
+</code></pre>
+<h2>Commands</h2>
+<ul>
+<li><code>agentic init</code></li>
+<li><code>agentic run</code></li>
+<li><code>agentic trace list</code></li>
+</ul>
+<h2>Keyboard Shortcuts</h2>
+<p>Use <code>J/K</code> to navigate headings within the docs portal. This is wired via a small script, giving AgenticTest a keyboard-driven path to verify focus management.</p>
+
+            </article>
+        </main>
+    </div>
+
+    <div id="search-modal" class="search-modal" hidden data-testid="search-modal">
+    <div class="search-panel">
+        <header>
+            <input type="text" id="search-input" placeholder="Search docs..." data-testid="search-input" autofocus />
+            <button id="search-close" data-testid="search-close">Esc</button>
+        </header>
+        <ul id="search-results" data-testid="search-results"></ul>
+    </div>
+</div>
+
+    <script src="/public/app.js"></script>
+</body>
+
+</html>

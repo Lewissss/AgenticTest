@@ -1,0 +1,12 @@
+{
+    "name": "events-rsvp",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "bun run server.ts",
+        "start": "bun run server.ts"
+    },
+    "dependencies": {
+        "bun": "latest"
+    }
+}

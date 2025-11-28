@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Configuration | Pulse Docs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="logo">
+                <span>Pulse Docs</span>
+                <button id="search-button" data-testid="search-button">Search (/)</button>
+            </div>
+            
+        </aside>
+        <main>
+            <article>
+                <header>
+                    <h1>Configuration</h1>
+                </header>
+                <p>Configuration is stored in <code>agentic.config.json</code>. The schema is simple for this mock:</p>
+<pre><code class="language-json">{
+  &quot;tracesDir&quot;: &quot;./traces&quot;,
+  &quot;compiledDir&quot;: &quot;./compiled-tests&quot;,
+  &quot;llm&quot;: {
+    &quot;provider&quot;: &quot;mock&quot;,
+    &quot;model&quot;: &quot;gpt-lite&quot;
+  }
+}
+</code></pre>
+
+            </article>
+        </main>
+    </div>
+
+    <div id="search-modal" class="search-modal" hidden data-testid="search-modal">
+    <div class="search-panel">
+        <header>
+            <input type="text" id="search-input" placeholder="Search docs..." data-testid="search-input" autofocus />
+            <button id="search-close" data-testid="search-close">Esc</button>
+        </header>
+        <ul id="search-results" data-testid="search-results"></ul>
+    </div>
+</div>
+
+    <script src="/public/app.js"></script>
+</body>
+
+</html>

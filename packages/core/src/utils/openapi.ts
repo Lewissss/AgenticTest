@@ -44,7 +44,7 @@ export class OpenApiValidator {
         }
 
         if (!operation) {
-            // If we can't find the operation, we can't validate. 
+            // If we can't find the operation, we can't validate.
             // For strict mode, this might be a failure, but for now we'll warn/skip.
             return { valid: true };
         }
@@ -52,8 +52,62 @@ export class OpenApiValidator {
         const responseSchema = operation.responses[status]?.content?.["application/json"]?.schema;
         if (!responseSchema) return { valid: true };
 
-        const validate = this.ajv.compile(responseSchema);
+        const dereferencedSchema = this.dereferenceSchema(responseSchema);
+        const validate = this.ajv.compile(dereferencedSchema);
         const valid = validate(body);
         return { valid, errors: validate.errors };
+    }
+
+    private dereferenceSchema(schema: any): any {
+        if (!schema) return schema;
+        if (schema.$ref) {
+            const resolved = this.resolveRef(schema.$ref);
+            if (!resolved) {
+                throw new Error(`Cannot resolve reference ${schema.$ref}`);
+            }
+            return this.dereferenceSchema(resolved);
+        }
+
+        if (Array.isArray(schema)) {
+            return schema.map((item) => this.dereferenceSchema(item));
+        }
+
+        if (typeof schema !== "object") {
+            return schema;
+        }
+
+        const clone: any = { ...schema };
+        if (clone.properties) {
+            clone.properties = Object.fromEntries(
+                Object.entries(clone.properties).map(([key, value]) => [key, this.dereferenceSchema(value)])
+            );
+        }
+        if (clone.items) {
+            clone.items = this.dereferenceSchema(clone.items);
+        }
+        if (clone.allOf) {
+            clone.allOf = clone.allOf.map((item: any) => this.dereferenceSchema(item));
+        }
+        if (clone.oneOf) {
+            clone.oneOf = clone.oneOf.map((item: any) => this.dereferenceSchema(item));
+        }
+        if (clone.anyOf) {
+            clone.anyOf = clone.anyOf.map((item: any) => this.dereferenceSchema(item));
+        }
+        if (clone.additionalProperties && typeof clone.additionalProperties === "object") {
+            clone.additionalProperties = this.dereferenceSchema(clone.additionalProperties);
+        }
+        return clone;
+    }
+
+    private resolveRef(ref: string): any {
+        if (!this.spec || !ref.startsWith("#/")) return null;
+        const pathSegments = ref.slice(2).split("/");
+        let current: any = this.spec;
+        for (const segment of pathSegments) {
+            current = current?.[segment];
+            if (current === undefined) return null;
+        }
+        return current;
     }
 }

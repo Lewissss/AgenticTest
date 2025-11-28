@@ -1,6 +1,8 @@
 import { test } from "bun:test";
 import { CompiledRunner } from "../../packages/core/src/compiled-runner.ts";
 
+const runTest = process.env.ATF_RUN_COMPILED === "true" ? test : test.skip;
+
 const trace = {
   "version": 1,
   "type": "api",
@@ -81,17 +83,16 @@ const trace = {
     }
   ]
 };
-
 const timeout = trace.policies?.timeoutsMs || 60000;
 
-test(`demo-system :: ${trace.testName}`, async () => {
-  const runner = new CompiledRunner(trace);
-  await runner.setup();
-  try {
-    for (const step of trace.steps) {
-      await runner.executeStep(step);
+runTest(`demo-system :: api_contract_smoke`, async () => {
+    const runner = new CompiledRunner(trace);
+    await runner.setup();
+    try {
+        for (const step of trace.steps) {
+            await runner.executeStep(step);
+        }
+    } finally {
+        await runner.teardown();
     }
-  } finally {
-    await runner.teardown();
-  }
 }, timeout);

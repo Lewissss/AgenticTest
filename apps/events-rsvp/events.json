@@ -1,0 +1,32 @@
+[
+    {
+        "id": "arcadia",
+        "title": "Arcadia Summit",
+        "speaker": "Lina Kovacs",
+        "date": "2025-12-01",
+        "time": "09:00",
+        "location": "San Francisco",
+        "tags": ["AI", "Automation"],
+        "description": "Dive into agentic testing strategies with live demos and panels."
+    },
+    {
+        "id": "nebula",
+        "title": "Nebula DevCamp",
+        "speaker": "Diego Marin",
+        "date": "2026-01-15",
+        "time": "13:00",
+        "location": "Austin",
+        "tags": ["Developer Tools"],
+        "description": "Hands-on lab walking teams through Bun-native automation patterns."
+    },
+    {
+        "id": "solstice",
+        "title": "Solstice Tour",
+        "speaker": "Maya Ajayi",
+        "date": "2026-02-20",
+        "time": "17:00",
+        "location": "Virtual",
+        "tags": ["Web", "Playwright"],
+        "description": "Virtual roadshow exploring UI reproducibility when nothing is mocked."
+    }
+]

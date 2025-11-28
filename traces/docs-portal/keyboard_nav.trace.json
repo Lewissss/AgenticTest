@@ -1,0 +1,69 @@
+{
+    "version": 1,
+    "type": "ui",
+    "testName": "keyboard_nav",
+    "description": "Use keyboard shortcuts to open search and jump between headings.",
+    "app": "docs-portal",
+    "baseUrl": "http://localhost:4020",
+    "apiBaseUrl": "http://localhost:4020",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "generator": {
+        "mode": "manual",
+        "llmProvider": "none",
+        "llmModel": "none"
+    },
+    "inputs": {
+        "env": {}
+    },
+    "policies": {
+        "headless": true,
+        "noMocks": true,
+        "maxSteps": 10,
+        "timeoutsMs": 30000
+    },
+    "steps": [
+        { "id": "s1", "action": "navigate", "selectorOrEndpoint": "${baseUrl}/overview/" },
+        {
+            "id": "s2",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "[data-testid='search-button']",
+            "guards": { "timeoutMs": 3000 }
+        },
+        {
+            "id": "s3",
+            "action": "press",
+            "selectorOrEndpoint": "body",
+            "input": "/"
+        },
+        {
+            "id": "s4",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "[data-testid='search-modal']",
+            "guards": { "timeoutMs": 2000 }
+        },
+        {
+            "id": "s5",
+            "action": "press",
+            "selectorOrEndpoint": "body",
+            "input": "Escape"
+        },
+        {
+            "id": "s6",
+            "action": "press",
+            "selectorOrEndpoint": "body",
+            "input": "j"
+        },
+        {
+            "id": "s7",
+            "action": "press",
+            "selectorOrEndpoint": "body",
+            "input": "k"
+        },
+        {
+            "id": "s8",
+            "action": "waitForText",
+            "selectorOrEndpoint": "Welcome to the mock documentation portal",
+            "expected": { "textIncludes": "mock documentation" }
+        }
+    ]
+}

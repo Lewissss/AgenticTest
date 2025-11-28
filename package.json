@@ -10,6 +10,9 @@
         "dev": "bun run --filter @atf/tui dev",
         "atf": "bun run packages/core/src/cli/index.ts"
     },
+    "dependencies": {
+        "@atf/core": "workspace:*"
+    },
     "devDependencies": {
         "bun-types": "latest"
     }

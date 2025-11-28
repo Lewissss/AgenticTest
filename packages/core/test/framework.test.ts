@@ -4,13 +4,44 @@ import { compileTrace } from "../src/compiler";
 import fs from "fs/promises";
 import path from "path";
 
-// Integration tests for the framework
-// Assumes demo system is running (we will start it in the verification step)
+const workspace = process.cwd();
+
+async function runCommand(cmd: string[]) {
+    const proc = Bun.spawn(cmd, { cwd: workspace, stdout: "inherit", stderr: "inherit" });
+    const code = await proc.exited;
+    if (code !== 0) {
+        throw new Error(`Command ${cmd.join(" ")} failed with code ${code}`);
+    }
+}
+
+async function waitFor(url: string, timeoutMs = 60000) {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+        try {
+            const res = await fetch(url);
+            if (res.ok) return;
+        } catch {
+            // retry
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+    throw new Error(`Timed out waiting for ${url}`);
+}
 
 describe("Framework Integration", () => {
     const demoApp = "demo-system";
     const tracesDir = path.resolve(process.cwd(), `traces/${demoApp}`);
     const compiledDir = path.resolve(process.cwd(), `compiled-tests/${demoApp}`);
+
+    beforeAll(async () => {
+        await runCommand(["docker", "compose", "up", "-d"]);
+        await waitFor("http://localhost:3020/health");
+        await waitFor("http://localhost:3010/health");
+    }, 180000);
+
+    afterAll(async () => {
+        await runCommand(["docker", "compose", "down", "-v"]);
+    }, 180000);
 
     test("Schema Validation - Valid Trace", async () => {
         const tracePath = path.join(tracesDir, "login_and_view_dashboard.trace.json");

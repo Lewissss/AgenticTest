@@ -62,7 +62,7 @@ describe("core utilities", () => {
         const outPath = await compileTrace("demo-system", path.resolve("traces/demo-system/login_and_view_dashboard.trace.json"));
         const content = await fs.readFile(outPath, "utf-8");
         expect(content).toContain("CompiledRunner");
-        expect(content).toContain("test(`demo-system");
+        expect(content).toContain("runTest(`demo-system");
     });
 
     test("API replay executes step", async () => {

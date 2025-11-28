@@ -2,8 +2,13 @@ import { beforeAll, afterAll, test, expect } from "bun:test";
 
 const workspace = process.cwd();
 
-const runCommand = async (cmd: string[]) => {
-    const proc = Bun.spawn(cmd, { cwd: workspace, stdout: "inherit", stderr: "inherit" });
+const runCommand = async (cmd: string[], options: { env?: Record<string, string> } = {}) => {
+    const proc = Bun.spawn(cmd, {
+        cwd: workspace,
+        stdout: "inherit",
+        stderr: "inherit",
+        env: options.env ? { ...process.env, ...options.env } : undefined
+    });
     return await proc.exited;
 };
 
@@ -25,11 +30,11 @@ beforeAll(async () => {
     await runCommand(["docker", "compose", "up", "-d"]);
     await waitFor("http://localhost:3020/health");
     await waitFor("http://localhost:3010/health");
-});
+}, 180000);
 
 afterAll(async () => {
     await runCommand(["docker", "compose", "down", "-v"]);
-});
+}, 180000);
 
 test("replay login trace", async () => {
     const code = await runCommand(["bun", "run", "atf", "replay", "--trace", "traces/demo-system/login_and_view_dashboard.trace.json"]);
@@ -37,6 +42,8 @@ test("replay login trace", async () => {
 }, 180000);
 
 test("compiled suite passes", async () => {
-    const code = await runCommand(["bun", "test", "compiled-tests/"]);
+    const code = await runCommand(["bun", "test", "compiled-tests/"], {
+        env: { ATF_RUN_COMPILED: "true" }
+    });
     expect(code).toBe(0);
 }, 180000);

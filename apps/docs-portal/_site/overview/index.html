@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Overview | Pulse Docs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="logo">
+                <span>Pulse Docs</span>
+                <button id="search-button" data-testid="search-button">Search (/)</button>
+            </div>
+            
+        </aside>
+        <main>
+            <article>
+                <header>
+                    <h1>Overview</h1>
+                </header>
+                <p>Welcome to the mock documentation portal used to validate AgenticTest. Everything here is static content powered by Eleventy and Lunr, but the navigation flows, anchors, and search interactions mimic a real docs system.</p>
+<h2>Goals</h2>
+<ul>
+<li>Provide a dense, scroll-heavy page for keyboard navigation tests.</li>
+<li>Expose anchor links, code snippets, and callouts to drive UI selectors.</li>
+<li>Serve as the landing page for <code>overview</code> trace replays.</li>
+</ul>
+<h3>What’s inside</h3>
+<ol>
+<li><strong>CLI basics:</strong> Understand commands and flags.</li>
+<li><strong>Guides:</strong> Learn how to trace workflows and test playbooks.</li>
+<li><strong>Reference:</strong> Configuration schema and API details.</li>
+</ol>
+<blockquote>
+<p>Because this is strictly a validation site, all data is mocked. Expand sections by editing markdown in <code>apps/docs-portal/content</code>.</p>
+</blockquote>
+
+            </article>
+        </main>
+    </div>
+
+    <div id="search-modal" class="search-modal" hidden data-testid="search-modal">
+    <div class="search-panel">
+        <header>
+            <input type="text" id="search-input" placeholder="Search docs..." data-testid="search-input" autofocus />
+            <button id="search-close" data-testid="search-close">Esc</button>
+        </header>
+        <ul id="search-results" data-testid="search-results"></ul>
+    </div>
+</div>
+
+    <script src="/public/app.js"></script>
+</body>
+
+</html>

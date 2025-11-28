@@ -122,16 +122,20 @@ export class Explorer {
         if (this.trace.type === "ui") {
             const page = this.executor.getPage();
             if (!page) return {};
-            const elements = await page.evaluate(() => {
-                const nodes = Array.from(document.querySelectorAll("[data-testid]"));
-                return nodes.slice(0, 15).map((node) => ({
-                    testId: node.getAttribute("data-testid"),
-                    text: (node as HTMLElement).innerText?.trim().slice(0, 120)
-                }));
-            });
+            const [elements, url, title] = await Promise.all([
+                page.evaluate(() => {
+                    const nodes = Array.from(document.querySelectorAll("[data-testid]"));
+                    return nodes.slice(0, 15).map((node) => ({
+                        testId: node.getAttribute("data-testid"),
+                        text: (node as HTMLElement).innerText?.trim().slice(0, 120)
+                    }));
+                }),
+                this.executor.getCurrentUrl(),
+                page.title()
+            ]);
             return {
-                url: page.url(),
-                title: await page.title(),
+                url,
+                title,
                 elements
             };
         }

@@ -19,9 +19,34 @@ services:
       dockerfile: Dockerfile.ui
     environment:
       DEMO_WEB_PORT: 3010
-      DEMO_API_BASE_URL: http://demo-api:3020
+      # Expose API via the host network so browser-based clients (Playwright) can reach it
+      DEMO_API_BASE_URL: http://localhost:3020
     depends_on:
       - demo-api
     ports:
       - "3010:3010"
+    restart: unless-stopped
+
+  status-board:
+    build:
+      context: ./apps/status-board
+      dockerfile: Dockerfile.ui
+    ports:
+      - "4010:80"
+    restart: unless-stopped
+
+  docs-portal:
+    build:
+      context: ./apps/docs-portal
+      dockerfile: Dockerfile.ui
+    ports:
+      - "4020:80"
+    restart: unless-stopped
+
+  events-rsvp:
+    build:
+      context: ./apps/events-rsvp
+      dockerfile: Dockerfile.ui
+    ports:
+      - "4030:4030"
     restart: unless-stopped

@@ -7,7 +7,7 @@ export async function compileTrace(app: string | undefined, tracePath: string) {
     const outputDir = path.resolve(process.cwd(), "compiled-tests", trace.app || app || "default");
     await fs.mkdir(outputDir, { recursive: true });
 
-    const templatePath = new URL("../compiled-templates/base.test.js", import.meta.url);
+    const templatePath = new URL("../compiled-templates/base.test.js.template", import.meta.url);
     const template = await fs.readFile(templatePath, "utf-8");
 
     const body = template

@@ -1,0 +1,21 @@
+<h1>Docs Portal</h1>
+<p>Eleventy + Lunr.js powered documentation site to validate search, navigation, and keyboard workflows in AgenticTest. Content is static markdown compiled into HTML. Search runs entirely on the client using a pre-built index.</p>
+<h2>Run locally</h2>
+<pre><code class="language-bash">cd apps/docs-portal
+# Install once
+bun install
+
+# Start Eleventy dev server
+npx @11ty/eleventy --serve
+</code></pre>
+<p>Or build static output:</p>
+<pre><code class="language-bash">npx @11ty/eleventy
+</code></pre>
+<p>The site is simple enough to serve directly from <code>dist/</code> or bundle via Docker if needed later.</p>
+<h2>Features</h2>
+<ul>
+<li>Hierarchical left nav with section anchors.</li>
+<li>Search modal (<code>/</code>) backed by Lunr.</li>
+<li>Keyboard navigation (J/K to move between headings).</li>
+<li>Content is mocked in <code>content/</code> — edit or add markdown files to expand coverage.</li>
+</ul>

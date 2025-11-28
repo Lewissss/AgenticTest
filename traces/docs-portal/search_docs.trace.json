@@ -1,0 +1,93 @@
+{
+    "version": 1,
+    "type": "ui",
+    "testName": "search_docs",
+    "description": "Navigate docs portal, then use the search modal to find a topic.",
+    "app": "docs-portal",
+    "baseUrl": "http://localhost:4020",
+    "apiBaseUrl": "http://localhost:4020",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "generator": {
+        "mode": "manual",
+        "llmProvider": "none",
+        "llmModel": "none"
+    },
+    "inputs": {
+        "env": {}
+    },
+    "policies": {
+        "headless": true,
+        "noMocks": true,
+        "maxSteps": 12,
+        "timeoutsMs": 30000
+    },
+    "steps": [
+        {
+            "id": "s1",
+            "action": "navigate",
+            "selectorOrEndpoint": "${baseUrl}/overview/"
+        },
+        {
+            "id": "s2",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "a[href='/cli/']",
+            "guards": { "timeoutMs": 5000 }
+        },
+        {
+            "id": "s3",
+            "action": "click",
+            "selectorOrEndpoint": "a[href='/cli/']"
+        },
+        {
+            "id": "s4",
+            "action": "waitForText",
+            "selectorOrEndpoint": "CLI Basics",
+            "expected": {
+                "textIncludes": "CLI"
+            }
+        },
+        {
+            "id": "s4a",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "body[data-search-ready='true']",
+            "guards": { "timeoutMs": 5000 }
+        },
+        {
+            "id": "s5",
+            "action": "press",
+            "selectorOrEndpoint": "body",
+            "input": "/"
+        },
+        {
+            "id": "s6",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "[data-testid='search-modal']",
+            "guards": { "timeoutMs": 3000 }
+        },
+        {
+            "id": "s7",
+            "action": "input",
+            "selectorOrEndpoint": "[data-testid='search-input']",
+            "input": "tracing"
+        },
+        {
+            "id": "s8",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "[data-testid='search-result']:first-of-type",
+            "guards": { "timeoutMs": 3000 }
+        },
+        {
+            "id": "s9",
+            "action": "click",
+            "selectorOrEndpoint": "[data-testid='search-result']:first-of-type a"
+        },
+        {
+            "id": "s10",
+            "action": "waitForText",
+            "selectorOrEndpoint": "Tracing Workflows",
+            "expected": {
+                "textIncludes": "Tracing"
+            }
+        }
+    ]
+}

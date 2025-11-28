@@ -1,0 +1,62 @@
+{
+    "version": 1,
+    "type": "ui",
+    "testName": "rsvp_flow",
+    "description": "Open the RSVP modal and submit mocked form.",
+    "app": "events-rsvp",
+    "baseUrl": "http://localhost:4030",
+    "apiBaseUrl": "http://localhost:4030",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "generator": {
+        "mode": "manual",
+        "llmProvider": "none",
+        "llmModel": "none"
+    },
+    "inputs": {
+        "env": {}
+    },
+    "policies": {
+        "headless": true,
+        "noMocks": true,
+        "maxSteps": 12,
+        "timeoutsMs": 30000
+    },
+    "steps": [
+        { "id": "s1", "action": "navigate", "selectorOrEndpoint": "${baseUrl}" },
+        {
+            "id": "s2",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "[data-testid='event-card']:first-of-type",
+            "guards": { "timeoutMs": 5000 }
+        },
+        {
+            "id": "s3",
+            "action": "click",
+            "selectorOrEndpoint": "[data-testid='event-card']:first-of-type [data-testid='view-event']"
+        },
+        {
+            "id": "s4",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "[data-testid='event-modal'][open]"
+        },
+        {
+            "id": "s5",
+            "action": "input",
+            "selectorOrEndpoint": "input[type='text']",
+            "input": "Agentic Tester"
+        },
+        {
+            "id": "s6",
+            "action": "input",
+            "selectorOrEndpoint": "input[type='email']",
+            "input": "agent@example.com"
+        },
+        { "id": "s7", "action": "click", "selectorOrEndpoint": "[data-testid='submit-rsvp']" },
+        {
+            "id": "s8",
+            "action": "waitForText",
+            "selectorOrEndpoint": "RSVP received",
+            "expected": { "textIncludes": "RSVP received" }
+        }
+    ]
+}

@@ -1,0 +1,63 @@
+{
+    "version": 1,
+    "type": "ui",
+    "testName": "status_overview",
+    "description": "Validate uptime summary and incidents list on the status board.",
+    "app": "status-board",
+    "baseUrl": "http://localhost:4010",
+    "apiBaseUrl": "http://localhost:4010",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "generator": {
+        "mode": "manual",
+        "llmProvider": "none",
+        "llmModel": "none"
+    },
+    "inputs": {
+        "env": {}
+    },
+    "policies": {
+        "headless": true,
+        "noMocks": true,
+        "maxSteps": 8,
+        "timeoutsMs": 30000
+    },
+    "steps": [
+        {
+            "id": "s1",
+            "action": "navigate",
+            "selectorOrEndpoint": "${baseUrl}"
+        },
+        {
+            "id": "s2",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "[data-testid='service-grid']",
+            "guards": {
+                "timeoutMs": 5000
+            }
+        },
+        {
+            "id": "s3",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "[data-testid='timeline-item']:first-of-type",
+            "guards": {
+                "timeoutMs": 5000
+            }
+        },
+        {
+            "id": "s4",
+            "action": "click",
+            "selectorOrEndpoint": "[data-testid='refresh-button']"
+        },
+        {
+            "id": "s5",
+            "action": "waitForText",
+            "selectorOrEndpoint": "Platform Status",
+            "guards": {
+                "expectTextIncludes": "Status"
+            },
+            "expected": {
+                "textIncludes": "Status"
+            }
+        }
+    ]
+}

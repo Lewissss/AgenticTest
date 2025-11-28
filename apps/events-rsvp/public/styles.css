@@ -1,0 +1,114 @@
+:root {
+    font-family: "Inter", system-ui, sans-serif;
+    background: #06121f;
+    color: #f4f8ff;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(circle at top, rgba(78, 139, 255, 0.2), transparent 55%), #03060c;
+    color: inherit;
+}
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem clamp(1rem, 4vw, 3rem);
+    gap: 1rem;
+}
+
+.hero h1 {
+    margin-bottom: 0.5rem;
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.ghost {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    color: inherit;
+    border-radius: 999px;
+    padding: 0.6rem 1.4rem;
+    cursor: pointer;
+}
+
+main {
+    padding: 0 clamp(1rem, 4vw, 3rem) 4rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.badge {
+    border-radius: 999px;
+    padding: 0.25rem 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1rem;
+}
+
+.event-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.event-card button {
+    border: none;
+    border-radius: 12px;
+    padding: 0.55rem 1.2rem;
+    cursor: pointer;
+    background: linear-gradient(120deg, #4e8bff, #a855f7);
+    color: #fff;
+}
+
+dialog {
+    border: none;
+    border-radius: 20px;
+    padding: 1.5rem;
+    width: min(420px, 90vw);
+    background: rgba(5, 10, 18, 0.95);
+    color: inherit;
+}
+
+dialog::backdrop {
+    backdrop-filter: blur(6px);
+    background: rgba(3, 6, 12, 0.6);
+}
+
+dialog form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+input {
+    padding: 0.65rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: inherit;
+}
+
+.toast {
+    min-height: 1.4rem;
+    color: #7dd3fc;
+}

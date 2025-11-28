@@ -1,6 +1,8 @@
 import { test } from "bun:test";
 import { CompiledRunner } from "../../packages/core/src/compiled-runner.ts";
 
+const runTest = process.env.ATF_RUN_COMPILED === "true" ? test : test.skip;
+
 const trace = {
   "version": 1,
   "type": "ui",
@@ -28,15 +30,60 @@ const trace = {
     "timeoutsMs": 60000
   },
   "steps": [
-    { "id": "s1", "action": "navigate", "selectorOrEndpoint": "${baseUrl}/login", "input": null },
-    { "id": "s2", "action": "input", "selectorOrEndpoint": "[data-testid='username-input']", "input": "${ENV:DEMO_USERNAME}" },
-    { "id": "s3", "action": "input", "selectorOrEndpoint": "[data-testid='password-input']", "input": "${ENV:DEMO_PASSWORD}" },
-    { "id": "s4", "action": "click", "selectorOrEndpoint": "[data-testid='login-button']", "input": null },
-    { "id": "s5", "action": "click", "selectorOrEndpoint": "[data-testid='nav-products']", "input": null },
-    { "id": "s6", "action": "waitForSelector", "selectorOrEndpoint": "[data-testid='products-list']", "input": null },
-    { "id": "s7", "action": "click", "selectorOrEndpoint": "[data-testid='add-to-cart-laptop']", "input": null },
-    { "id": "s8", "action": "click", "selectorOrEndpoint": "[data-testid='nav-cart']", "input": null },
-    { "id": "s9", "action": "waitForSelector", "selectorOrEndpoint": "[data-testid='cart-items']", "input": null },
+    {
+      "id": "s1",
+      "action": "navigate",
+      "selectorOrEndpoint": "${baseUrl}/login",
+      "input": null
+    },
+    {
+      "id": "s2",
+      "action": "input",
+      "selectorOrEndpoint": "[data-testid='username-input']",
+      "input": "${ENV:DEMO_USERNAME}"
+    },
+    {
+      "id": "s3",
+      "action": "input",
+      "selectorOrEndpoint": "[data-testid='password-input']",
+      "input": "${ENV:DEMO_PASSWORD}"
+    },
+    {
+      "id": "s4",
+      "action": "click",
+      "selectorOrEndpoint": "[data-testid='login-button']",
+      "input": null
+    },
+    {
+      "id": "s5",
+      "action": "click",
+      "selectorOrEndpoint": "[data-testid='nav-products']",
+      "input": null
+    },
+    {
+      "id": "s6",
+      "action": "waitForSelector",
+      "selectorOrEndpoint": "[data-testid='products-list']",
+      "input": null
+    },
+    {
+      "id": "s7",
+      "action": "click",
+      "selectorOrEndpoint": "[data-testid='add-to-cart-laptop']",
+      "input": null
+    },
+    {
+      "id": "s8",
+      "action": "click",
+      "selectorOrEndpoint": "[data-testid='nav-cart']",
+      "input": null
+    },
+    {
+      "id": "s9",
+      "action": "waitForSelector",
+      "selectorOrEndpoint": "[data-testid='cart-items']",
+      "input": null
+    },
     {
       "id": "s10",
       "action": "waitForText",
@@ -48,17 +95,16 @@ const trace = {
     }
   ]
 };
-
 const timeout = trace.policies?.timeoutsMs || 60000;
 
-test(`demo-system :: ${trace.testName}`, async () => {
-  const runner = new CompiledRunner(trace);
-  await runner.setup();
-  try {
-    for (const step of trace.steps) {
-      await runner.executeStep(step);
+runTest(`demo-system :: add_to_cart`, async () => {
+    const runner = new CompiledRunner(trace);
+    await runner.setup();
+    try {
+        for (const step of trace.steps) {
+            await runner.executeStep(step);
+        }
+    } finally {
+        await runner.teardown();
     }
-  } finally {
-    await runner.teardown();
-  }
 }, timeout);

@@ -1,0 +1,55 @@
+{
+    "version": 1,
+    "type": "ui",
+    "testName": "multi_event_view",
+    "description": "Cycle through events, open modal, and verify toast resets.",
+    "app": "events-rsvp",
+    "baseUrl": "http://localhost:4030",
+    "apiBaseUrl": "http://localhost:4030",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "generator": {
+        "mode": "manual",
+        "llmProvider": "none",
+        "llmModel": "none"
+    },
+    "inputs": {
+        "env": {}
+    },
+    "policies": {
+        "headless": true,
+        "noMocks": true,
+        "maxSteps": 12,
+        "timeoutsMs": 30000
+    },
+    "steps": [
+        { "id": "s1", "action": "navigate", "selectorOrEndpoint": "${baseUrl}" },
+        {
+            "id": "s2",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "[data-testid='event-card']:first-of-type",
+            "guards": { "timeoutMs": 5000 }
+        },
+        {
+            "id": "s3",
+            "action": "click",
+            "selectorOrEndpoint": "[data-testid='event-card']:nth-of-type(2) [data-testid='view-event']"
+        },
+        {
+            "id": "s4",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "[data-testid='event-modal'][open]"
+        },
+        { "id": "s5", "action": "click", "selectorOrEndpoint": "#close-modal" },
+        {
+            "id": "s6",
+            "action": "click",
+            "selectorOrEndpoint": "[data-testid='event-card']:nth-of-type(3) [data-testid='view-event']"
+        },
+        {
+            "id": "s7",
+            "action": "waitForSelector",
+            "selectorOrEndpoint": "[data-testid='event-modal'][open]"
+        },
+        { "id": "s8", "action": "click", "selectorOrEndpoint": "#close-modal" }
+    ]
+}

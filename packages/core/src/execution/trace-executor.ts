@@ -62,6 +62,11 @@ export class TraceExecutor {
         return this.uiDriver?.getPage() || null;
     }
 
+    async getCurrentUrl() {
+        if (!this.uiDriver) return "";
+        return this.uiDriver.currentUrl();
+    }
+
     getLastApiResponse() {
         return this.lastApiResponse;
     }
@@ -196,7 +201,7 @@ export class TraceExecutor {
     private async applyGuards(guards?: TraceStep["guards"]) {
         if (!guards) return;
         if (guards.expectUrlIncludes) {
-            const url = this.uiDriver?.getPage()?.url() || "";
+            const url = this.uiDriver ? await this.uiDriver.currentUrl() : "";
             if (!url.includes(guards.expectUrlIncludes)) {
                 throw new Error(`Guard failed: URL does not include ${guards.expectUrlIncludes}`);
             }

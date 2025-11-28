@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Events RSVP</title>
+    <link rel="stylesheet" href="/public/styles.css">
+</head>
+
+<body>
+    <header class="hero">
+        <div>
+            <p class="eyebrow">Pulse Experiences</p>
+            <h1>Events & RSVP</h1>
+            <p>Join hands-on workshops and summits built for automation engineers. Select an event to see more details, then submit your RSVP.</p>
+        </div>
+        <button class="ghost" id="open-all" data-testid="explore-btn">Explore Lineup</button>
+    </header>
+
+    <main>
+        <section>
+            <header class="section-header">
+                <h2>Upcoming</h2>
+                <span class="badge" id="events-count">0 events</span>
+            </header>
+            <div class="events-grid" id="events-grid"></div>
+        </section>
+    </main>
+
+    <dialog id="event-modal" data-testid="event-modal">
+        <form method="dialog">
+            <header>
+                <p class="eyebrow" data-field="tag"></p>
+                <h2 data-field="title"></h2>
+                <p class="muted" data-field="meta"></p>
+            </header>
+            <p data-field="description"></p>
+            <label>
+                Name
+                <input type="text" data-field="name-input" required>
+            </label>
+            <label>
+                Email
+                <input type="email" data-field="email-input" required>
+            </label>
+            <button type="submit" data-testid="submit-rsvp">Confirm RSVP</button>
+            <button id="close-modal" type="button">Close</button>
+            <p class="toast" data-field="toast"></p>
+        </form>
+    </dialog>
+
+    <script src="/public/app.js" type="module"></script>
+</body>
+
+</html>

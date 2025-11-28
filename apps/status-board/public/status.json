@@ -1,0 +1,60 @@
+{
+    "summary": {
+        "uptime": 99.982,
+        "lastUpdated": "2025-11-27T23:45:00Z"
+    },
+    "services": [
+        {
+            "name": "Auth Gateway",
+            "description": "OAuth broker + session minting across tenants",
+            "status": "up",
+            "region": "Global",
+            "sla": "99.99%",
+            "latency": 82
+        },
+        {
+            "name": "Realtime Stream",
+            "description": "WebSocket fan-out and subscription orchestration",
+            "status": "partial",
+            "region": "US-East",
+            "sla": "99.90%",
+            "latency": 156
+        },
+        {
+            "name": "Object Store",
+            "description": "Multi-region blob storage tier",
+            "status": "up",
+            "region": "EU-West",
+            "sla": "99.95%",
+            "latency": 97
+        },
+        {
+            "name": "Workflow Engine",
+            "description": "Background job runner with saga support",
+            "status": "down",
+            "region": "AP-Singapore",
+            "sla": "99.50%",
+            "latency": 0
+        }
+    ],
+    "timeline": [
+        {
+            "title": "Workflow engine outage",
+            "severity": "major",
+            "window": "Nov 27 · 20:50 UTC",
+            "body": "Investigating elevated error rates after a dependency upgrade. Requests in APAC are failing with HTTP 503."
+        },
+        {
+            "title": "Realtime stream degradation",
+            "severity": "minor",
+            "window": "Nov 27 · 22:05 UTC",
+            "body": "Connections in us-east-1 are reconnecting more frequently. No data loss; expect intermittent interruptions."
+        },
+        {
+            "title": "Planned database maintenance",
+            "severity": "maintenance",
+            "window": "Nov 28 · 02:00-03:00 UTC",
+            "body": "Read replicas in eu-west-2 will undergo patching. Failover testing will cause brief read-only windows."
+        }
+    ]
+}

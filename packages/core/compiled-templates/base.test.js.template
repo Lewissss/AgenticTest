@@ -1,10 +1,12 @@
 import { test } from "bun:test";
 import { CompiledRunner } from "../../packages/core/src/compiled-runner.ts";
 
+const runTest = process.env.ATF_RUN_COMPILED === "true" ? test : test.skip;
+
 const trace = __TRACE_OBJECT__;
 const timeout = trace.policies?.timeoutsMs || 60000;
 
-test(`__TEST_TITLE__`, async () => {
+runTest(`__TEST_TITLE__`, async () => {
     const runner = new CompiledRunner(trace);
     await runner.setup();
     try {

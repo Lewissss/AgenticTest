@@ -1,0 +1,32 @@
+{
+    "docs": [
+        {
+            "id": "overview",
+            "title": "Overview",
+            "body": "Welcome to the mock documentation portal used to validate AgenticTest. Everything here is static content powered by Eleventy and Lunr, but the navigation flows mimic a real docs system.",
+            "preview": "Landing page with goals and quick tour.",
+            "url": "/overview/"
+        },
+        {
+            "id": "cli",
+            "title": "CLI Basics",
+            "body": "The Agentic CLI helps automate test workflows. Install via bun install -g agentic-cli and review commands such as agentic init and agentic trace list.",
+            "preview": "Install instructions and keyboard shortcuts.",
+            "url": "/cli/"
+        },
+        {
+            "id": "tracing",
+            "title": "Tracing Workflows",
+            "body": "Capture traces from the demo system. Steps include starting the recorder, executing actions, and exporting JSON.",
+            "preview": "How to capture and export traces.",
+            "url": "/tracing/"
+        },
+        {
+            "id": "testing",
+            "title": "Testing Playbooks",
+            "body": "Chain traces and publish reports using playbooks. Content focuses on environment setup and artifact exports.",
+            "preview": "Checklist for running playbooks.",
+            "url": "/testing/"
+        }
+    ]
+}
